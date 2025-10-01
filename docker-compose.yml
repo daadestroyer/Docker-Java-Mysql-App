@@ -1,0 +1,36 @@
+# Defines which Compose file format version you’re using.
+version: "3.8"
+
+# Defines all containers (services) that make up your application.
+services:
+  # MySQL database
+  db:
+    image: mysql:8.0                # Pulls the official MySQL 8.0 image from Docker Hub.
+    container_name: mysql-db        # Gives the container a readable name.
+    restart: unless-stopped         # Automatically restarts the container if it crashes.
+    environment:                    # Sets environment variables that configure MySQL automatically.
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: apppass
+    ports:
+      - "3306:3306"                 # Maps MySQL’s internal port 3306 to your host machine, so you can connect using tools like DBeaver.
+    volumes:
+      - db_data:/var/lib/mysql      # Persists MySQL data on your system (not lost when container restarts).
+    healthcheck:                    # Docker checks every 5 seconds if MySQL is ready.
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  # Java (Spring Boot) application
+  app:
+    build: .                        # Builds the app container from your local Dockerfile in the same folder.
+    container_name: java-app        # Gives a clear name to the app container.
+    depends_on:                     # Ensures the app starts only after the MySQL container is healthy.
+      db:
+        condition: service_healthy
+    ports:                          # Exposes your app to the host machine’s port 8080 → accessible at http://localhost:8080
+      - "8080:8080"
+
+volumes:                            # Defines a named volume used by MySQL to store persistent data.
+  db_data:
