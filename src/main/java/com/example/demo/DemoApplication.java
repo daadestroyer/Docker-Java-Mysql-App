@@ -47,7 +47,10 @@ class UserController {
 	public List<User> getAll() {
 		return repo.findAll();
 	}
-
+	@GetMapping("/{id}")
+	public User getUserById(@PathVariable Long id){
+		return repo.findById(id).get();
+	}
 	@PostMapping
 	public User create(@RequestBody User u) {
 		return repo.save(u);
