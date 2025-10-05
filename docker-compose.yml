@@ -21,7 +21,7 @@ services:
       retries: 10
 
   app:
-    build: .
+    build: . # . means the current folder (where your docker-compose.yml file is located).
     image: docker-java-mysql-app:latest
     container_name: java-app
     depends_on:

@@ -10,11 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
-
 @SpringBootApplication
 public class DemoApplication implements CommandLineRunner {
 	@Autowired
@@ -33,6 +29,7 @@ public class DemoApplication implements CommandLineRunner {
 			userRepo.save(new User("Default User1"));
 			userRepo.save(new User("Default User2"));
 			userRepo.save(new User("Default User3"));
+			userRepo.save(new User("Default User4"));
 		}
 	}
 }
