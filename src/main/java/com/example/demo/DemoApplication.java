@@ -10,65 +10,88 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
+
 @SpringBootApplication
 public class DemoApplication implements CommandLineRunner {
-	@Autowired
-	private UserRepository userRepo;
+    @Autowired
+    private UserRepository userRepo;
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		SpringApplication.run(DemoApplication.class, args);
+        SpringApplication.run(DemoApplication.class, args);
 
-	}
+    }
 
-	@Override
-	public void run(String... args) {
-		// insert sample data if empty
-		if (userRepo.count() == 0) {
-			userRepo.save(new User("Default User1"));
-			userRepo.save(new User("Default User2"));
-			userRepo.save(new User("Default User3"));
-			userRepo.save(new User("Default User4"));
-		}
-	}
+    @Override
+    public void run(String... args) {
+        // insert sample data if empty
+        if (userRepo.count() == 0) {
+            userRepo.save(new User("Default User1"));
+            userRepo.save(new User("Default User2"));
+            userRepo.save(new User("Default User3"));
+        }
+    }
 }
 
 
 @RestController
 @RequestMapping("/users")
 class UserController {
-	@Autowired
-	private UserRepository repo;
+    @Autowired
+    private UserRepository repo;
 
-	@GetMapping
-	public List<User> getAll() {
-		return repo.findAll();
-	}
+    @GetMapping
+    public List<User> getAll() {
+        return repo.findAll();
+    }
 
-	@GetMapping("/{id}")
-	public User getUserById(@PathVariable Long id){
-		return repo.findById(id).get();
-	}
-	@PostMapping
-	public User create(@RequestBody User u) {
-		return repo.save(u);
-	}
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable Long id) {
+        return repo.findById(id).get();
+    }
+
+    @PostMapping
+    public User create(@RequestBody User u) {
+        return repo.save(u);
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteUser(@PathVariable Long id) {
+        User user = repo.findById(id).get();
+        repo.delete(user);
+        return "User " + id + " deleted...";
+    }
 }
+
 @Entity
 class User {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
 
-	public User() {}
-	public User(String name) { this.name = name; }
+    public User() {
+    }
 
-	public Long getId() { return id; }
-	public String getName() { return name; }
-	public void setName(String name) { this.name = name; }
+    public User(String name) {
+        this.name = name;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
-interface UserRepository extends JpaRepository<User,Long>{
+
+interface UserRepository extends JpaRepository<User, Long> {
 
 }
