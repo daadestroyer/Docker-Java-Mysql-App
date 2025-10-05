@@ -26,14 +26,13 @@ public class DemoApplication implements CommandLineRunner {
 
 	}
 
-
-
 	@Override
 	public void run(String... args) {
 		// insert sample data if empty
 		if (userRepo.count() == 0) {
-			userRepo.save(new User("Alice"));
-			userRepo.save(new User("Bob"));
+			userRepo.save(new User("Default User1"));
+			userRepo.save(new User("Default User2"));
+			userRepo.save(new User("Default User3"));
 		}
 	}
 }
