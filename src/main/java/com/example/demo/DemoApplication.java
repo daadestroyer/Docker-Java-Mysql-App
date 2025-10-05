@@ -33,6 +33,7 @@ public class DemoApplication implements CommandLineRunner {
 		}
 	}
 }
+
 @RestController
 @RequestMapping("/users")
 class UserController {
