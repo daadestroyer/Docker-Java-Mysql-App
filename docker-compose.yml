@@ -22,6 +22,7 @@ services:
 
   app:
     build: .
+    image: docker-java-mysql-app:latest
     container_name: java-app
     depends_on:
       db:
