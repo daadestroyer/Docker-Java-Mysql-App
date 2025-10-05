@@ -37,9 +37,6 @@ public class DemoApplication implements CommandLineRunner {
 @RestController
 @RequestMapping("/users")
 class UserController {
-
-
-
 	@Autowired
 	private UserRepository repo;
 
