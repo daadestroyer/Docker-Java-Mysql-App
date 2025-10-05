@@ -41,6 +41,7 @@ public class DemoApplication implements CommandLineRunner {
 class UserController {
 
 
+
 	@Autowired
 	private UserRepository repo;
 
