@@ -40,6 +40,7 @@ public class DemoApplication implements CommandLineRunner {
 @RequestMapping("/users")
 class UserController {
 
+
 	@Autowired
 	private UserRepository repo;
 
