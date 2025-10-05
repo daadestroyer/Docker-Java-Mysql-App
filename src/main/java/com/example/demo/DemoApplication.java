@@ -9,9 +9,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootApplication
 public class DemoApplication implements CommandLineRunner {
@@ -43,13 +46,21 @@ class UserController {
     private UserRepository repo;
 
     @GetMapping
-    public List<User> getAll() {
-        return repo.findAll();
+    public ResponseEntity<?> getAll() {
+        List<User> allUser = repo.findAll();
+        if (allUser.isEmpty()) {
+            return new ResponseEntity<>("No data found", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(allUser, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable Long id) {
-        return repo.findById(id).get();
+    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+        Optional<User> optionalUser = repo.findById(id);
+        if (!optionalUser.isPresent()) {
+            return new ResponseEntity<>("User " + id + " not found", HttpStatus.OK);
+        }
+        return new ResponseEntity<>(optionalUser.get(), HttpStatus.OK);
     }
 
     @PostMapping
@@ -58,10 +69,13 @@ class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteUser(@PathVariable Long id) {
-        User user = repo.findById(id).get();
-        repo.delete(user);
-        return "User " + id + " deleted...";
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        Optional<User> optionalUser = repo.findById(id);
+        if (!optionalUser.isPresent()) {
+            return new ResponseEntity<>("User with id " + id + " not found", HttpStatus.NOT_FOUND);
+        }
+        repo.delete(optionalUser.get());
+        return new ResponseEntity<>("User " + id + " deleted...", HttpStatus.OK);
     }
 }
 
