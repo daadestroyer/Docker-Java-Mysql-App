@@ -47,6 +47,7 @@ class UserController {
 	public List<User> getAll() {
 		return repo.findAll();
 	}
+
 	@GetMapping("/{id}")
 	public User getUserById(@PathVariable Long id){
 		return repo.findById(id).get();
