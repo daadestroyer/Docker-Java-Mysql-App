@@ -22,7 +22,7 @@ services:
 
   app:
     build: . # . means the current folder (where your docker-compose.yml file is located).
-    image: docker-java-mysql-app:latest
+    image: "daadestroyer14/docker-java-mysql-app"
     container_name: java-app
     depends_on:
       db:
